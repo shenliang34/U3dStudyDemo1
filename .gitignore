@@ -1,0 +1,8 @@
+# ---> Actionscript
+# Build and Release Folders
+demo1/Library
+demo1/obj
+demo1/ProjectSettings
+demo1/Temp
+Assembly-CSharp.csproj
+demo1.sln
