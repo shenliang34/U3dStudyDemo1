@@ -61,7 +61,7 @@ public class Main : MonoBehaviour
 		{
 			Debug.Log ("success");
 			tips.text = "success";
-
+			Application.LoadLevel ("unity/level2");
 		} 
 		else
 		{
