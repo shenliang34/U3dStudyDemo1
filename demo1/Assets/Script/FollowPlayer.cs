@@ -6,12 +6,13 @@ public class FollowPlayer : MonoBehaviour
 
 	// Use this for initialization
 
-	private GameObject obj;
+	public GameObject obj;
 
 	private Vector3 offset;
 	void Start ()
 	{
 		//obj = GameObject.Find ("");
+		transform.LookAt(obj.transform.position);
 	}
 	
 	// Update is called once per frame

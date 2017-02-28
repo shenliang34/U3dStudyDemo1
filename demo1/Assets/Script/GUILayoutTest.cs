@@ -27,7 +27,7 @@ public class GUILayoutTest : MonoBehaviour {
 		//GUILayout.BeginArea(new Rect(0,0,Screen.width,Screen.height));
 		//Debug.Log(Screen.width + " height "+ Screen.height + "");
 		GUILayout.BeginArea (new Rect(10,10,200,100));
-
+		GUILayout.Button ("fa");
 		GUILayout.EndArea ();
 	}
 }
