@@ -5,10 +5,10 @@ public class Main2 : MonoBehaviour
 {
 
 	// Use this for initialization
-	private float verticalValue = 50;
-	private float horizontalValue = 50;
-	private string verLab = "";
-	private string horLab = "";
+	///private float verticalValue = 50;
+	//private float horizontalValue = 50;
+	//private string verLab = "";
+	//private string horLab = "";
 	private Rect windowRect = new Rect(60,60,120,50);
 	void Start ()
 	{

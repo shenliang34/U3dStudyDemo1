@@ -36,9 +36,15 @@ public class saveFile : MonoBehaviour
 
 	void OnGUI()
 	{
+		//截取屏幕
 		if (GUI.Button (new Rect (100, 100, 100, 100), "截取屏幕"))
 		{
 			Application.CaptureScreenshot ("cap.png");
+		}
+
+		if(GUI.Button(new Rect(220,100,100,100),"打开网页"))
+		{
+			Application.OpenURL("http://www.baidu.com");
 		}
 	}
 		//加载文件
