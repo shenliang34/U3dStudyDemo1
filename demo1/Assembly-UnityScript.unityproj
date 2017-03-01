@@ -46,7 +46,28 @@
     </Reference>
   </ItemGroup>
   <ItemGroup>
-     <Compile Include="Assets\Script\js_test.js" />
+     <Compile Include="Assets\Kodlar\BallShadow.js" />
+     <Compile Include="Assets\Kodlar\BipFix.js" />
+     <Compile Include="Assets\Kodlar\DestroyTimer.js" />
+     <Compile Include="Assets\Kodlar\FizikFixsi.js" />
+     <Compile Include="Assets\Kodlar\Futbolcu.js" />
+     <Compile Include="Assets\Kodlar\FutbolcuMesh.js" />
+     <Compile Include="Assets\Kodlar\Kamera.js" />
+     <Compile Include="Assets\Kodlar\Kontroller.js" />
+     <Compile Include="Assets\Kodlar\Menu.js" />
+     <Compile Include="Assets\Kodlar\OyuncuSecmeIconu.js" />
+     <Compile Include="Assets\Kodlar\PasFix.js" />
+     <Compile Include="Assets\Kodlar\Sistem.js" />
+     <Compile Include="Assets\Kodlar\TesvikPrimi.js" />
+     <Compile Include="Assets\Kodlar\Top.js" />
+     <None Include="Assets\Standard Assets\Projectors\Guidelines.txt" />
+     <None Include="Assets\Standard Assets\Projectors\Sources\Shaders\Projector Multiply.shader" />
+     <None Include="Assets\Standard Assets\Skyboxes\skybox info.txt" />
+     <None Include="Assets\Standard Assets\Skyboxes\ skybox info.txt" />
+     <None Include="Assets\Modeller\Futbolcu\Animations.txt" />
+     <None Include="Assets\Modeller\Futbolcu\Futbolcu\Animations.txt" />
+     <None Include="Assets\Installing!.txt" />
+     <None Include="Assets\Standard Assets\Projectors\Sources\Shaders\Projector Light.shader" />
  <Reference Include="UnityEngine.UI">
  <HintPath>D:/Program Files/Unity/Editor/Data/UnityExtensions/Unity/GUISystem/UnityEngine.UI.dll</HintPath>
  </Reference>
@@ -65,6 +86,10 @@
  <Reference Include="UnityEngine.VR">
  <HintPath>D:/Program Files/Unity/Editor/Data/UnityExtensions/Unity/UnityVR/RuntimeEditor/UnityEngine.VR.dll</HintPath>
  </Reference>
+  </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="Assembly-UnityScript-firstpass.unityproj">
+      <Project>{372726FA-FEE8-E2B9-7ED3-66A7FE126761}</Project>      <Name>Assembly-UnityScript-firstpass</Name>    </ProjectReference>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 

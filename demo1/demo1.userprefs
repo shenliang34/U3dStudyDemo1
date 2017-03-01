@@ -1,21 +1,8 @@
 ﻿<Properties StartupItem="Assembly-CSharp.csproj">
   <MonoDevelop.Ide.Workspace ActiveConfiguration="Debug" PreferredExecutionTarget="Unity.Instance.Unity Editor" />
-  <MonoDevelop.Ide.Workbench ActiveDocument="Assets\Script\CameraControl.cs">
+  <MonoDevelop.Ide.Workbench ActiveDocument="Assets\Scripts\test2\Move.cs">
     <Files>
-      <File FileName="Assets\Script\Main.cs" Line="1" Column="1" />
-      <File FileName="Assets\Script\CameraControl.cs" Line="78" Column="43" />
-      <File FileName="Assets\Script\CubeControl.cs" Line="1" Column="1" />
-      <File FileName="Assets\Script\FollowPlayer.cs" Line="1" Column="1" />
-      <File FileName="Assets\Script\GUILayoutTest.cs" Line="1" Column="1" />
-      <File FileName="Assets\Script\CS_test.cs" Line="1" Column="1" />
-      <File FileName="Assets\Script\Main2.cs" Line="1" Column="1" />
-      <File FileName="Assets\Script\tmp.cs" Line="1" Column="1" />
-      <File FileName="Assets\Standard Assets\js_test.js" Line="1" Column="1" />
-      <File FileName="Assets\Script\CollisionEnter.cs" Line="1" Column="1" />
-      <File FileName="Assets\Script\InputTest.cs" Line="1" Column="1" />
-      <File FileName="Assets\Script\saveFile.cs" Line="1" Column="1" />
-      <File FileName="Assets\Script\MouseDrag.cs" Line="1" Column="1" />
-      <File FileName="Assets\Script\RandomTest.cs" Line="1" Column="1" />
+      <File FileName="Assets\Scripts\test2\Move.cs" Line="29" Column="3" />
     </Files>
   </MonoDevelop.Ide.Workbench>
   <MonoDevelop.Ide.DebuggingService.Breakpoints>

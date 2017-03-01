@@ -27,12 +27,12 @@ public class Main : MonoBehaviour
 		//gameObject
 		//tips = this.gameObject.GetComponent("tips");
 		//用户名
-		//username = GameObject.Find ("Canvas/username").GetComponent<InputField> ();
+		username = GameObject.Find ("Canvas/username").GetComponent<InputField> ();
 		//密码
-		//password = GameObject.Find ("Canvas/password").GetComponent<InputField> ();
-		//tips = GameObject.Find("Canvas/tips").GetComponent<Text>();
-		//
-		//tips.text = "";
+		password = GameObject.Find ("Canvas/password").GetComponent<InputField> ();
+		tips = GameObject.Find("Canvas/tips").GetComponent<Text>();
+		//重置
+		tips.text = "";
 	}
 	
 	// Update is called once per frame

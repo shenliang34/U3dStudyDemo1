@@ -46,8 +46,15 @@
     </Reference>
   </ItemGroup>
   <ItemGroup>
-     <Compile Include="Assets\Standard Assets\js_test.js" />
-     <None Include="Assets\newFile.txt" />
+     <Compile Include="Assets\Plugins\Spiker.js" />
+     <None Include="Assets\Standard Assets\Projectors\Guidelines.txt" />
+     <None Include="Assets\Standard Assets\Projectors\Sources\Shaders\Projector Multiply.shader" />
+     <None Include="Assets\Standard Assets\Skyboxes\skybox info.txt" />
+     <None Include="Assets\Standard Assets\Skyboxes\ skybox info.txt" />
+     <None Include="Assets\Modeller\Futbolcu\Animations.txt" />
+     <None Include="Assets\Modeller\Futbolcu\Futbolcu\Animations.txt" />
+     <None Include="Assets\Installing!.txt" />
+     <None Include="Assets\Standard Assets\Projectors\Sources\Shaders\Projector Light.shader" />
  <Reference Include="UnityEngine.UI">
  <HintPath>D:/Program Files/Unity/Editor/Data/UnityExtensions/Unity/GUISystem/UnityEngine.UI.dll</HintPath>
  </Reference>
