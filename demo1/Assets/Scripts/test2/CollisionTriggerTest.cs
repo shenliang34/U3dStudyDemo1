@@ -40,9 +40,12 @@ public class CollisionTriggerTest : MonoBehaviour {
 	void OnTriggerEnter(Collider collider)
 	{
 		Debug.Log ("Trigger Enter");
-		Destroy (collider.gameObject);
-		csharp = GameObject.Find ("Main Camera").GetComponent<Move>();
-		csharp.DestroyObject ();
+		if (collider.gameObject.tag == "food")
+		{
+			Destroy (collider.gameObject);
+			csharp = GameObject.Find ("Main Camera").GetComponent<Move>();
+			csharp.DestroyObject ();
+		}
 	}
 
 	//触发器停留

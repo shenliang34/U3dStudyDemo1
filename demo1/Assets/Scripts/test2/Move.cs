@@ -18,19 +18,10 @@ public class Move : MonoBehaviour {
 	 *水平
 	 */
 	private const string HORIZONTAL = "Horizontal";
-	//正在进行中
-	private const int GAMEING = 1;
-	//游戏结束
-	private const int GAMEEND = 2;
-	//游戏暂停
-	private const int GAMEPAUSE = 3;
-	//游戏状态
-	private int gameStatus = 0;
-
 	//移动速度
 	private float moveSpeed = 50;
 	//旋转速度
-	private float rotateSpeed = 100;
+	private float rotateSpeed = 50;
 	//偏移
 	private Vector3 offsetVector = new Vector3(0,-8,60);
 	//角度
@@ -81,7 +72,7 @@ public class Move : MonoBehaviour {
 	//当前总共
 	private int currentNum;
 	//胜利数量
-	private int winNum = 2;
+	private int winNum = 20;
 
 	//
 	//public List<Texture2D> list = new List<Texture2D>();
@@ -90,10 +81,33 @@ public class Move : MonoBehaviour {
 	private Text resultText;//结果文本
 	private float startTime;//开始时间
 	private float endTime;//结束时间
-	private const float TOTAL_TIME = 600;//秒 总计时间
+	private int totalTime = 30;//秒 总计时间
+	private int addTime = 8;//秒，增加多少时间
 
 	//记录经过的点
 	private List<Vector3> posList = new List<Vector3>();
+
+	//方向
+	private int direction = 0;
+	//上
+	private const int DIR_UP = 1;
+	//下
+	private const int DIR_DOWN = 2;
+	//左
+	private const int DIR_LEFT = 3;
+	//右
+	private const int DIR_RIGHT = 4;
+
+	//正在进行中
+	private const int GAMEING = 1;
+	//游戏结束
+	private const int GAMEEND = 2;
+	//游戏暂停
+	private const int GAMEPAUSE = 3;
+	//游戏状态
+	private int gameStatus = 0;
+	//
+	//public GameObject obj;
 	void Start () {
 		startTime = Time.time;
 
@@ -121,17 +135,40 @@ public class Move : MonoBehaviour {
 		//OBJ = GameObject(Resources.Load("player"));
 		//可以直接公开指向
 		OBJ = Resources.Load("player") as GameObject;
-		InvokeRepeating("CreateFood",0,1);
+		InvokeRepeating ("CreateFood", 0, 1);
+		//InvokeRepeating ("MoveUpdate", 0, 0.2f);
+
+		//链条关节
+		//HingeJoint joint = player.AddComponent<HingeJoint>();
+		//obj.GetComponent<Rigidbody> ().useGravity = true;
+		//joint.connectedBody = obj.GetComponent<Rigidbody>();
 	}
 	
 	// Update is called once per frame
 	void Update () {
 		if (gameStatus != GAMEING)
 			return;
-		
+
+		//ControlDir ();
+
 		//方向键
 		float horizontal = Input.GetAxis (HORIZONTAL);
 		float vertical = Input.GetAxis (VERTICAL);
+
+//		if (Input.GetKeyDown (KeyCode.W))
+//		{
+//			direction = DIR_UP;
+//		} else if (Input.GetKeyDown (KeyCode.S))
+//		{
+//			direction = DIR_DOWN;
+//		} else if (Input.GetKeyDown (KeyCode.A))
+//		{
+//			direction = DIR_LEFT;
+//		} else if (Input.GetKeyDown (KeyCode.D))
+//		{
+//			direction = DIR_RIGHT;
+//		}
+
 
 		if (horizontal == 1)
 		{
@@ -158,6 +195,52 @@ public class Move : MonoBehaviour {
 		{
 			//Debug.Log ("垂直 下边");
 			player.transform.Translate (Vector3.back * Time.deltaTime * moveSpeed);
+		}
+
+		//结束游戏
+		if (player.transform.position.y < -5)
+		{
+			GameEndStatus ();
+		}
+	}
+
+	//控制方向
+	void ControlDir()
+	{
+		if (Input.GetKeyDown (KeyCode.W))
+		{
+			direction = DIR_UP;
+		} else if (Input.GetKeyDown (KeyCode.S))
+		{
+			direction = DIR_DOWN;
+		} else if (Input.GetKeyDown (KeyCode.A))
+		{
+			direction = DIR_LEFT;
+		} else if (Input.GetKeyDown (KeyCode.D))
+		{
+			direction = DIR_RIGHT;
+		}
+
+		//MoveUpdate ();
+	}
+
+	//移动
+	void MoveUpdate()
+	{
+		switch (direction)
+		{
+		case DIR_UP:
+			player.transform.Translate (Vector3.forward * 5);
+				break;
+			case DIR_DOWN:
+			player.transform.Translate (Vector3.back * 5);
+				break;
+			case DIR_LEFT:
+				player.transform.Translate (Vector3.left * 5);
+				break;
+			case DIR_RIGHT:
+				player.transform.Translate (Vector3.right * 5);
+				break;
 		}
 	}
 
@@ -259,7 +342,22 @@ public class Move : MonoBehaviour {
 			GUI.DrawTexture (new Rect (vx, vy, target.width, target.height), target);
 		}
 
-		GUI.Label (new Rect (20, 140, 300, 40), "游戏时间：" + formatTime (Time.time - startTime));
+		//*******check game over/////
+		//剩余时间
+		float remain = Remain();
+		if (remain <= 0)
+		{
+			//时间到，游戏结束
+			GameEndStatus ();
+		}
+
+		GUI.Label (new Rect (20, 140, 300, 40), "游戏时间：" + formatTime (remain));
+	}
+
+	float Remain()
+	{
+		float remain = Mathf.Max(totalTime - (Time.time - startTime),0);
+		return remain;
 	}
 
 	//游戏结束的ui显示
@@ -268,7 +366,7 @@ public class Move : MonoBehaviour {
 		endGameCanvas.enabled = true;
 
 		float score = endTime - startTime;
-		resultText.text = "游戏结束\n 您的分数是:" + score;
+		resultText.text = "游戏结束\n 您的分数是:" + numScore + "分";
 	}
 
 	//格式化
@@ -340,8 +438,9 @@ public class Move : MonoBehaviour {
 	//销毁物体
 	public void DestroyObject()
 	{
-		numScore ++;
-		currentNum --;
+		numScore ++;//分数增加
+		currentNum --;//当前
+		//totalTime = Mathf.Min(Remain() + addTime,30);
 		if(numScore >= winNum)
 		{
 			GameEndStatus ();
