@@ -2,6 +2,7 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
+using UnityEngine.SceneManagement;
 
 public class Main : MonoBehaviour
 {
@@ -15,10 +16,10 @@ public class Main : MonoBehaviour
 	private Text tips;
 	void Start ()
 	{
-		int a, b, c;
-		a = 1;
-		b = 2;
-		c = a + b;
+//		int a, b, c;
+//		a = 1;
+//		b = 2;
+//		c = a + b;
 		//Debug.Log (c);
 
 		//Debug.Log(Mathf.Sin(30));
@@ -61,7 +62,8 @@ public class Main : MonoBehaviour
 		{
 			Debug.Log ("success");
 			tips.text = "success";
-			Application.LoadLevel ("unity/level2");
+			SceneManager.LoadScene ("unity/level2");
+			//Application.LoadLevel ("unity/level2");
 		} 
 		else
 		{

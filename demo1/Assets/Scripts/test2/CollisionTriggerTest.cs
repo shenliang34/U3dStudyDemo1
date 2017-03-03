@@ -5,6 +5,7 @@ using UnityEngine;
 public class CollisionTriggerTest : MonoBehaviour {
 
 	// Use this for initialization
+	private Move csharp;
 	void Start () {
 		Debug.Log ("start");
 	}
@@ -40,6 +41,8 @@ public class CollisionTriggerTest : MonoBehaviour {
 	{
 		Debug.Log ("Trigger Enter");
 		Destroy (collider.gameObject);
+		csharp = GameObject.Find ("Main Camera").GetComponent<Move>();
+		csharp.DestroyObject ();
 	}
 
 	//触发器停留

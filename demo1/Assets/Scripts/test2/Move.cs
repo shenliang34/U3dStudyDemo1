@@ -1,6 +1,8 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.UI;
+using UnityEngine.SceneManagement;
 
 public class Move : MonoBehaviour {
 
@@ -16,6 +18,14 @@ public class Move : MonoBehaviour {
 	 *水平
 	 */
 	private const string HORIZONTAL = "Horizontal";
+	//正在进行中
+	private const int GAMEING = 1;
+	//游戏结束
+	private const int GAMEEND = 2;
+	//游戏暂停
+	private const int GAMEPAUSE = 3;
+	//游戏状态
+	private int gameStatus = 0;
 
 	//移动速度
 	private float moveSpeed = 50;
@@ -64,17 +74,30 @@ public class Move : MonoBehaviour {
 	private float hei;
 	//
 	private GameObject OBJ;
+	//分数
+	private int numScore;
+	//总共数量
+	private int countNum;
+	//当前总共
+	private int currentNum;
+	//胜利数量
+	private int winNum = 2;
+
 	//
+	//public List<Texture2D> list = new List<Texture2D>();
 
+	private Canvas endGameCanvas;//结束的画面
+	private Text resultText;//结果文本
+	private float startTime;//开始时间
+	private float endTime;//结束时间
+	private const float TOTAL_TIME = 600;//秒 总计时间
 
-	//
-	public List<Texture2D> list = new List<Texture2D>();
-
-
-
+	//记录经过的点
+	private List<Vector3> posList = new List<Vector3>();
 	void Start () {
-		player = GameObject.Find ("player");
+		startTime = Time.time;
 
+		player = GameObject.Find ("player");
 		//transform.LookAt (player.transform.position);
 		plane = GameObject.Find("plane");
 
@@ -87,17 +110,25 @@ public class Move : MonoBehaviour {
 		mapOffsetX = Screen.width - map.width + map.width / 2 - (role.width / 2);
 		mapOffsetY = map.height / 2 - (role.height / 2);
 
+		numScore = countNum = 0;
+
+		gameStatus = GAMEING;
+		endGameCanvas = GameObject.Find ("Canvas").GetComponent<Canvas>();
+		resultText = GameObject.Find ("Canvas/result").GetComponent<Text>();
+		endGameCanvas.enabled = false;
+
 		//每隔一段时间生成一个物体
 		//OBJ = GameObject(Resources.Load("player"));
 		//可以直接公开指向
 		OBJ = Resources.Load("player") as GameObject;
-		InvokeRepeating("CreateFood",0,5);
+		InvokeRepeating("CreateFood",0,1);
 	}
 	
 	// Update is called once per frame
 	void Update () {
+		if (gameStatus != GAMEING)
+			return;
 		
-		//�û���
 		//方向键
 		float horizontal = Input.GetAxis (HORIZONTAL);
 		float vertical = Input.GetAxis (VERTICAL);
@@ -132,6 +163,8 @@ public class Move : MonoBehaviour {
 
 	void LateUpdate()
 	{
+		if (gameStatus != GAMEING)
+			return;
 		//摄像机跟随人物
 		//transform.position = player.transform.position + offsetVector;
 		//angleX = player.transform.eulerAngles.x;
@@ -179,11 +212,35 @@ public class Move : MonoBehaviour {
 //		}
 
 		//player.transform.Translate (new Vector3 (x, player.transform.position.y, z));
+
+
 	}
 
+	//更新GUI
 	void OnGUI()
 	{
 		//GUI.sk
+		switch (gameStatus)
+		{
+		case GAMEING:
+			GameIngGui ();
+			break;
+		case GAMEEND:
+			GameEndGui ();
+			break;
+		}
+	}
+
+	//游戏正在进行中的ui显示
+	void GameIngGui()
+	{
+		endGameCanvas.enabled = false;
+
+		GUI.skin.label.normal.textColor = new Color(255,0,0);
+		GUI.skin.label.fontSize = 20;
+		GUI.Label(new Rect(20,20,200,40),"分数：" + numScore);
+		GUI.Label (new Rect (20, 60, 200, 40), "当前总共：" + currentNum);
+		GUI.Label (new Rect (20, 100, 200, 40), "所有总共：" + countNum);
 
 		GUI.DrawTexture (new Rect (Screen.width - map.width, 0, map.width, map.height), map);
 		GUI.DrawTexture (new Rect (mapRoleX, mapRoleY, role.width, role.height), role);
@@ -201,23 +258,129 @@ public class Move : MonoBehaviour {
 			//Debug.Log ("vx:"+ vx + "vy:" + vy);
 			GUI.DrawTexture (new Rect (vx, vy, target.width, target.height), target);
 		}
+
+		GUI.Label (new Rect (20, 140, 300, 40), "游戏时间：" + formatTime (Time.time - startTime));
 	}
 
+	//游戏结束的ui显示
+	void GameEndGui()
+	{
+		endGameCanvas.enabled = true;
+
+		float score = endTime - startTime;
+		resultText.text = "游戏结束\n 您的分数是:" + score;
+	}
+
+	//格式化
+	string formatTime(float time)
+	{
+		int day = Mathf.FloorToInt (time / (3600 * 24));
+		int hour = Mathf.FloorToInt(time / 3600);
+		int minu = Mathf.FloorToInt(time / 60);
+		int seco = Mathf.FloorToInt(time % 60);
+		string str = "";
+		if (day > 0)
+		{
+			str = day + "天" + hour + "小时" + minu + "分" + seco + "秒";
+		} 
+		else
+		{
+			
+			str = formatNumber(hour) + ":" +  formatNumber(minu) + ":" +  formatNumber(seco);
+		}
+
+		return str;
+	}
+
+	//写着
+	string formatNumber(int num,string replaceValue = "0",int count = 2)
+	{
+		string numStr = num.ToString ();
+		while (numStr.Length < count)
+		{
+			numStr = replaceValue + numStr;
+		}
+		return numStr;
+	}
+ 
+	//创建食物
 	void CreateFood()
 	{
 		//Debug.Log ("CreateFood");
+		//当前个数超过20个就不生成
+		if (currentNum >= 20)
+			return;
 		//随机生成不同位置的食物
 		float randomX = Random.Range (-wid/2,wid/2);
 		float randomZ = Random.Range (-hei/2,hei/2);
 		Debug.Log ("随机生成的X:" + randomX + "随机生成的Z:" + randomZ);
 
+		//放位置
 		GameObject obj = Instantiate(OBJ);
 		obj.transform.position = new Vector3 (randomX,3,randomZ);
-
-	//	Texture2D t;
-
+		//增加个数
+		countNum++;
+		currentNum++;
 	}
 
+	//创建get set方法
+	public int NumberScore
+	{
+		get
+		{
+			return numScore;
+		}
 
+		set 
+		{ 
+			numScore = value;
+		}
+	}
+
+	//销毁物体
+	public void DestroyObject()
+	{
+		numScore ++;
+		currentNum --;
+		if(numScore >= winNum)
+		{
+			GameEndStatus ();
+		}
+	}
+
+	//游戏结束处理逻辑
+	public void GameEndStatus()
+	{
+		gameStatus = GAMEEND;
+		endTime = Time.time;
+		destoryAllObjs ();
+		CancelInvoke ("CreateFood");
+	}
+
+	//游戏开始处理逻辑
+	public void GameStartStatus()
+	{
+		//加载当前场景重新开始游戏
+		SceneManager.LoadScene (SceneManager.GetActiveScene ().name);
+	}
+		
+	//重新开始游戏
+	public void ReStart()
+	{
+		//游戏进入开始状态
+		GameStartStatus ();
+	}
+
+	//销毁所有生成的
+	void destoryAllObjs()
+	{
+		//获取所有的食物
+		GameObject [] objs = GameObject.FindGameObjectsWithTag("food");
+		for (int i = 0; i < objs.Length; i++)
+		{
+			GameObject obj = objs [i];
+			Destroy (obj);
+		}
+	}
 
 }
