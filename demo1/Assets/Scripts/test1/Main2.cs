@@ -9,7 +9,7 @@ public class Main2 : MonoBehaviour
 	//private float horizontalValue = 50;
 	//private string verLab = "";
 	//private string horLab = "";
-	private Rect windowRect = new Rect(60,60,120,50);
+	//private Rect windowRect = new Rect(60,60,120,50);
 	void Start ()
 	{
 	

@@ -19,11 +19,11 @@ public class Move : MonoBehaviour {
 	 */
 	private const string HORIZONTAL = "Horizontal";
 	//移动速度
-	private float moveSpeed = 50;
+	private float moveSpeed = 30;
 	//旋转速度
 	private float rotateSpeed = 50;
 	//偏移
-	private Vector3 offsetVector = new Vector3(0,-8,60);
+	private Vector3 offsetVector = new Vector3(0,-20,100);
 	//角度
 	public Quaternion rotation;
 	//角度x
@@ -135,7 +135,7 @@ public class Move : MonoBehaviour {
 		//OBJ = GameObject(Resources.Load("player"));
 		//可以直接公开指向
 		OBJ = Resources.Load("player") as GameObject;
-		InvokeRepeating ("CreateFood", 0, 1);
+		//InvokeRepeating ("CreateFood", 0, 1);
 		//InvokeRepeating ("MoveUpdate", 0, 0.2f);
 
 		//链条关节
@@ -185,16 +185,18 @@ public class Move : MonoBehaviour {
 			player.transform.Rotate(Vector3.down * Time.deltaTime * rotateSpeed);
 		}
 
-		if (vertical == 1)
+
+        player.transform.Translate(Vector3.forward * Time.deltaTime * moveSpeed);
+        if (vertical == 1)
 		{
 			//Debug.Log ("垂直 上边");
 
-			player.transform.Translate (Vector3.forward * Time.deltaTime * moveSpeed);
+			//player.transform.Translate (Vector3.forward * Time.deltaTime * moveSpeed);
 		} 
 		else if (vertical == -1)
 		{
 			//Debug.Log ("垂直 下边");
-			player.transform.Translate (Vector3.back * Time.deltaTime * moveSpeed);
+			//player.transform.Translate (Vector3.back * Time.deltaTime * moveSpeed);
 		}
 
 		//结束游戏

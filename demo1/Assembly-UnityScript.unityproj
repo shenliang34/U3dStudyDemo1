@@ -3,9 +3,8 @@
   <PropertyGroup>
     <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
     <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
-    <ProductVersion>10.0.20506</ProductVersion>
+    <ProductVersion>8.0.30703</ProductVersion>
     <SchemaVersion>2.0</SchemaVersion>
-    <RootNamespace></RootNamespace>
     <ProjectGuid>{FC1B9B2C-E99B-CF42-842E-D9F90DE880E5}</ProjectGuid>
     <OutputType>Library</OutputType>
     <AppDesignerFolder>Properties</AppDesignerFolder>
@@ -13,6 +12,7 @@
     <TargetFrameworkVersion>v3.5</TargetFrameworkVersion>
     <FileAlignment>512</FileAlignment>
     <BaseDirectory>Assets</BaseDirectory>
+    <UsePartialTypes>false</UsePartialTypes>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
     <DebugSymbols>true</DebugSymbols>
@@ -31,65 +31,69 @@
     <ErrorReport>prompt</ErrorReport>
     <WarningLevel>4</WarningLevel>
     <NoWarn>0169</NoWarn>
+    <DefineConstants>
+    </DefineConstants>
   </PropertyGroup>
   <ItemGroup>
     <Reference Include="System" />
-    <Reference Include="System.XML" />
     <Reference Include="System.Core" />
     <Reference Include="System.Runtime.Serialization" />
     <Reference Include="System.Xml.Linq" />
     <Reference Include="UnityEngine">
-      <HintPath>D:/Program Files/Unity/Editor/Data/Managed/UnityEngine.dll</HintPath>
+      <HintPath>D:\Program Files\Unity\Editor\Data\Managed\UnityEngine.dll</HintPath>
     </Reference>
     <Reference Include="UnityEditor">
-      <HintPath>D:/Program Files/Unity/Editor/Data/Managed/UnityEditor.dll</HintPath>
+      <HintPath>D:\Program Files\Unity\Editor\Data\Managed\UnityEditor.dll</HintPath>
     </Reference>
+    <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
-     <Compile Include="Assets\Kodlar\BallShadow.js" />
-     <Compile Include="Assets\Kodlar\BipFix.js" />
-     <Compile Include="Assets\Kodlar\DestroyTimer.js" />
-     <Compile Include="Assets\Kodlar\FizikFixsi.js" />
-     <Compile Include="Assets\Kodlar\Futbolcu.js" />
-     <Compile Include="Assets\Kodlar\FutbolcuMesh.js" />
-     <Compile Include="Assets\Kodlar\Kamera.js" />
-     <Compile Include="Assets\Kodlar\Kontroller.js" />
-     <Compile Include="Assets\Kodlar\Menu.js" />
-     <Compile Include="Assets\Kodlar\OyuncuSecmeIconu.js" />
-     <Compile Include="Assets\Kodlar\PasFix.js" />
-     <Compile Include="Assets\Kodlar\Sistem.js" />
-     <Compile Include="Assets\Kodlar\TesvikPrimi.js" />
-     <Compile Include="Assets\Kodlar\Top.js" />
-     <None Include="Assets\Standard Assets\Projectors\Guidelines.txt" />
-     <None Include="Assets\Standard Assets\Projectors\Sources\Shaders\Projector Multiply.shader" />
-     <None Include="Assets\Standard Assets\Skyboxes\skybox info.txt" />
-     <None Include="Assets\Standard Assets\Skyboxes\ skybox info.txt" />
-     <None Include="Assets\Modeller\Futbolcu\Animations.txt" />
-     <None Include="Assets\Modeller\Futbolcu\Futbolcu\Animations.txt" />
-     <None Include="Assets\Installing!.txt" />
-     <None Include="Assets\Standard Assets\Projectors\Sources\Shaders\Projector Light.shader" />
- <Reference Include="UnityEngine.UI">
- <HintPath>D:/Program Files/Unity/Editor/Data/UnityExtensions/Unity/GUISystem/UnityEngine.UI.dll</HintPath>
- </Reference>
- <Reference Include="UnityEngine.Networking">
- <HintPath>D:/Program Files/Unity/Editor/Data/UnityExtensions/Unity/Networking/UnityEngine.Networking.dll</HintPath>
- </Reference>
- <Reference Include="UnityEngine.PlaymodeTestsRunner">
- <HintPath>D:/Program Files/Unity/Editor/Data/UnityExtensions/Unity/PlaymodeTestsRunner/UnityEngine.PlaymodeTestsRunner.dll</HintPath>
- </Reference>
- <Reference Include="UnityEngine.Analytics">
- <HintPath>D:/Program Files/Unity/Editor/Data/UnityExtensions/Unity/UnityAnalytics/UnityEngine.Analytics.dll</HintPath>
- </Reference>
- <Reference Include="UnityEngine.HoloLens">
- <HintPath>D:/Program Files/Unity/Editor/Data/UnityExtensions/Unity/UnityHoloLens/RuntimeEditor/UnityEngine.HoloLens.dll</HintPath>
- </Reference>
- <Reference Include="UnityEngine.VR">
- <HintPath>D:/Program Files/Unity/Editor/Data/UnityExtensions/Unity/UnityVR/RuntimeEditor/UnityEngine.VR.dll</HintPath>
- </Reference>
+    <Compile Include="Assets\Kodlar\BallShadow.js" />
+    <Compile Include="Assets\Kodlar\BipFix.js" />
+    <Compile Include="Assets\Kodlar\DestroyTimer.js" />
+    <Compile Include="Assets\Kodlar\FizikFixsi.js" />
+    <Compile Include="Assets\Kodlar\Futbolcu.js" />
+    <Compile Include="Assets\Kodlar\FutbolcuMesh.js" />
+    <Compile Include="Assets\Kodlar\Kamera.js" />
+    <Compile Include="Assets\Kodlar\Kontroller.js" />
+    <Compile Include="Assets\Kodlar\Menu.js" />
+    <Compile Include="Assets\Kodlar\OyuncuSecmeIconu.js" />
+    <Compile Include="Assets\Kodlar\PasFix.js" />
+    <Compile Include="Assets\Kodlar\Sistem.js" />
+    <Compile Include="Assets\Kodlar\TesvikPrimi.js" />
+    <Compile Include="Assets\Kodlar\Top.js" />
+    <None Include="Assets\Standard Assets\Projectors\Guidelines.txt" />
+    <None Include="Assets\Standard Assets\Projectors\Sources\Shaders\Projector Multiply.shader" />
+    <None Include="Assets\Standard Assets\Skyboxes\skybox info.txt" />
+    <None Include="Assets\Standard Assets\Skyboxes\ skybox info.txt" />
+    <None Include="Assets\Modeller\Futbolcu\Animations.txt" />
+    <None Include="Assets\Modeller\Futbolcu\Futbolcu\Animations.txt" />
+    <None Include="Assets\Installing!.txt" />
+    <None Include="Assets\Standard Assets\Projectors\Sources\Shaders\Projector Light.shader" />
+    <Reference Include="UnityEngine.UI">
+      <HintPath>D:\Program Files\Unity\Editor\Data\UnityExtensions\Unity\GUISystem\UnityEngine.UI.dll</HintPath>
+    </Reference>
+    <Reference Include="UnityEngine.Networking">
+      <HintPath>D:\Program Files\Unity\Editor\Data\UnityExtensions\Unity\Networking\UnityEngine.Networking.dll</HintPath>
+    </Reference>
+    <Reference Include="UnityEngine.PlaymodeTestsRunner">
+      <HintPath>D:\Program Files\Unity\Editor\Data\UnityExtensions\Unity\PlaymodeTestsRunner\UnityEngine.PlaymodeTestsRunner.dll</HintPath>
+    </Reference>
+    <Reference Include="UnityEngine.Analytics">
+      <HintPath>D:\Program Files\Unity\Editor\Data\UnityExtensions\Unity\UnityAnalytics\UnityEngine.Analytics.dll</HintPath>
+    </Reference>
+    <Reference Include="UnityEngine.HoloLens">
+      <HintPath>D:\Program Files\Unity\Editor\Data\UnityExtensions\Unity\UnityHoloLens\RuntimeEditor\UnityEngine.HoloLens.dll</HintPath>
+    </Reference>
+    <Reference Include="UnityEngine.VR">
+      <HintPath>D:\Program Files\Unity\Editor\Data\UnityExtensions\Unity\UnityVR\RuntimeEditor\UnityEngine.VR.dll</HintPath>
+    </Reference>
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="Assembly-UnityScript-firstpass.unityproj">
-      <Project>{372726FA-FEE8-E2B9-7ED3-66A7FE126761}</Project>      <Name>Assembly-UnityScript-firstpass</Name>    </ProjectReference>
+      <Project>{372726FA-FEE8-E2B9-7ED3-66A7FE126761}</Project>
+      <Name>Assembly-UnityScript-firstpass</Name>
+    </ProjectReference>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
@@ -99,5 +103,4 @@
   <Target Name="AfterBuild">
   </Target>
   -->
-  
 </Project>

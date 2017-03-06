@@ -5,9 +5,9 @@ using UnityEngine;
 public class GUILayoutTest : MonoBehaviour {
 
 	// Use this for initialization
-	private GameObject obj;
+	//private GameObject obj;
 	void Start () {
-		obj = GameObject.Find ("object");
+		//obj = GameObject.Find ("object");
 		GameObject o = GameObject.CreatePrimitive (PrimitiveType.Cube);
 		//o.AddComponent (Rigidbody);
 		o.name = "cucucu";
