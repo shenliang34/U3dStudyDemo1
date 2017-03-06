@@ -196,7 +196,7 @@ public class Move : MonoBehaviour {
 		{
 			//Debug.Log ("垂直 上边");
 
-			player.transform.Translate (Vector3.forward * Time.deltaTime * moveSpeed);
+			//player.transform.Translate (Vector3.forward * Time.deltaTime * moveSpeed);
 		} 
 		else if (vertical == -1)
 		{
@@ -458,7 +458,7 @@ public class Move : MonoBehaviour {
     //增加一个新的身体
     void createBody()
     {
-        GameObject obj = Instantiate(SNAKE_BODY);
+        GameObject obj = Instantiate(lastBody);
         FollowTarget CShape = obj.GetComponent<FollowTarget>();
         CShape.target = lastBody;
 

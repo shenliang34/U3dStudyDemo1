@@ -20,14 +20,11 @@ public class FollowTarget : MonoBehaviour
     //
     private float angleY;
     //
-    private float currentAngleY;
+
 
     //移动的位置
     private Vector3 movePos;
-    //
-    private Vector3 offsetVector = new Vector3(0, 0, 6);
-
-    void Start ()
+	void Start ()
 	{
 		if (target)
 		{
@@ -64,13 +61,24 @@ public class FollowTarget : MonoBehaviour
 	{
 		if(target)
 		{
-            angleY = target.transform.eulerAngles.y;
-            currentAngleY = Mathf.LerpAngle(currentAngleY, angleY, 0.1f);
-            Quaternion rotation = Quaternion.Euler(0, currentAngleY, 0);
-            transform.position = target.transform.position - (rotation * offsetVector);
-            transform.rotation = rotation;
+           
+            //if (posList.Count > 0)
+            //{
+                //movePos = posList[0];
+                //transform.rotation = Quaternion.Slerp(transform.rotation,an)
+                //transform.position = new Vector3(Mathf.MoveTowards(transform.position,movePos));
+            //}
 
-        }
+            //if (movePos != null)
+            //{
+            //    transform.Translate(movePos - transform.transform.position);
+            //    if (Vector3.Distance(movePos, transform.transform.position) < 0.5f)
+            //    {
+            //        movePos = posList[0];
+            //    }
+            //}
+            
+		}
 	}
 
     //记录
