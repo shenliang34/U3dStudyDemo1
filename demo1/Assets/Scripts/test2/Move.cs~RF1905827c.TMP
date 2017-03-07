@@ -1,0 +1,503 @@
+﻿using System.Collections;
+using System.Collections.Generic;
+using UnityEngine;
+using UnityEngine.UI;
+using UnityEngine.SceneManagement;
+
+public class Move : MonoBehaviour {
+
+	// Use this for initialization
+	private GameObject player;
+
+	/**
+	 *垂直
+	 */
+	private const string VERTICAL = "Vertical";
+
+	/**
+	 *水平
+	 */
+	private const string HORIZONTAL = "Horizontal";
+	//移动速度
+	private float moveSpeed = 30;
+	//旋转速度
+	private float rotateSpeed = 50;
+	//偏移
+	private Vector3 offsetVector = new Vector3(0,-40,100);
+	//角度
+	public Quaternion rotation;
+	//角度x
+	public float angleX;
+	//角度y
+	public float angleY;
+	//角度z
+	public float angleZ;
+	//
+	public float currentAngleX ;
+	//
+	public float currentAngleY ;
+	//小地图制作
+	//
+	private static readonly float lerpAngleOffset = 0.5f;
+	//
+	public Texture2D map;
+	//
+	public Texture2D role;
+	//
+	public Texture2D target;
+	//
+	private GameObject plane;
+	//
+	public float scaleX;
+	//
+	public float scaleY;
+	//
+	private float mapRoleX;
+	//
+	private float mapRoleY;
+	//2d地图偏移
+	private float mapOffsetX;
+	//2d地图偏移
+	private float mapOffsetY;
+	//宽
+	private float wid;
+	//高
+	private float hei;
+	//
+	private GameObject FOOD;
+    //
+    private GameObject SNAKE_BODY;
+    //
+    public GameObject lastBody;
+    //分数
+    private int numScore;
+	//总共数量
+	private int countNum;
+	//当前总共
+	private int currentNum;
+	//胜利数量
+	private int winNum = 20;
+
+	//
+	//public List<Texture2D> list = new List<Texture2D>();
+
+	private Canvas endGameCanvas;//结束的画面
+	private Text resultText;//结果文本
+	private float startTime;//开始时间
+	private float endTime;//结束时间
+	private int totalTime = 200;//秒 总计时间
+	//private int addTime = 8;//秒，增加多少时间
+
+	//记录经过的点
+	private List<Vector3> posList = new List<Vector3>();
+
+	//方向
+	private int direction = 0;
+	//上
+	private const int DIR_UP = 1;
+	//下
+	private const int DIR_DOWN = 2;
+	//左
+	private const int DIR_LEFT = 3;
+	//右
+	private const int DIR_RIGHT = 4;
+
+	//正在进行中
+	private const int GAMEING = 1;
+	//游戏结束
+	private const int GAMEEND = 2;
+	//游戏暂停
+	private const int GAMEPAUSE = 3;
+	//游戏状态
+	private int gameStatus = 0;
+
+	void Start () {
+		startTime = Time.time;
+
+		player = GameObject.Find ("player");
+		//transform.LookAt (player.transform.position);
+		plane = GameObject.Find("plane");
+
+		wid = plane.transform.localScale.x;
+		hei = plane.transform.localScale.z;
+
+		scaleX = wid / map.width;
+		scaleY = hei / map.height;
+
+		mapOffsetX = Screen.width - map.width + map.width / 2 - (role.width / 2);
+		mapOffsetY = map.height / 2 - (role.height / 2);
+
+		numScore = countNum = 0;
+
+		gameStatus = GAMEING;
+		endGameCanvas = GameObject.Find ("Canvas").GetComponent<Canvas>();
+		resultText = GameObject.Find ("Canvas/result").GetComponent<Text>();
+		endGameCanvas.enabled = false;
+
+		//每隔一段时间生成一个物体
+		//OBJ = GameObject(Resources.Load("player"));
+		//可以直接公开指向
+		FOOD = Resources.Load("player") as GameObject;
+        SNAKE_BODY = Resources.Load("snake") as GameObject;
+
+        InvokeRepeating ("CreateFood", 0, 1);
+		//InvokeRepeating ("MoveUpdate", 0, 0.2f);
+
+		//链条关节
+		//HingeJoint joint = player.AddComponent<HingeJoint>();
+		//obj.GetComponent<Rigidbody> ().useGravity = true;
+		//joint.connectedBody = obj.GetComponent<Rigidbody>();
+	}
+	
+	// Update is called once per frame
+	void Update () {
+		if (gameStatus != GAMEING)
+			return;
+
+		//ControlDir ();
+
+		//方向键
+		float horizontal = Input.GetAxis (HORIZONTAL);
+		float vertical = Input.GetAxis (VERTICAL);
+
+//		if (Input.GetKeyDown (KeyCode.W))
+//		{
+//			direction = DIR_UP;
+//		} else if (Input.GetKeyDown (KeyCode.S))
+//		{
+//			direction = DIR_DOWN;
+//		} else if (Input.GetKeyDown (KeyCode.A))
+//		{
+//			direction = DIR_LEFT;
+//		} else if (Input.GetKeyDown (KeyCode.D))
+//		{
+//			direction = DIR_RIGHT;
+//		}
+
+
+		if (horizontal == 1)
+		{
+			//Debug.Log ("水平 右边");
+			//player.transform.Translate (Vector3.right * Time.deltaTime * moveSpeed);
+			//围绕自身旋转
+			player.transform.Rotate(Vector3.up * Time.deltaTime * rotateSpeed);
+		} 
+		else if (horizontal == -1)
+		{
+			//Debug.Log ("水平 左边");
+			//player.transform.Translate (Vector3.left * Time.deltaTime * moveSpeed);
+			//围绕自身旋转
+			player.transform.Rotate(Vector3.down * Time.deltaTime * rotateSpeed);
+		}
+
+
+        player.transform.Translate(Vector3.forward * Time.deltaTime * moveSpeed);
+        if (vertical == 1)
+		{
+			//Debug.Log ("垂直 上边");
+
+			//player.transform.Translate (Vector3.forward * Time.deltaTime * moveSpeed);
+		} 
+		else if (vertical == -1)
+		{
+			//Debug.Log ("垂直 下边");
+			//player.transform.Translate (Vector3.back * Time.deltaTime * moveSpeed);
+		}
+
+		//结束游戏
+		if (player.transform.position.y < -5)
+		{
+			GameEndStatus ();
+		}
+	}
+
+	//控制方向
+	void ControlDir()
+	{
+		if (Input.GetKeyDown (KeyCode.W))
+		{
+			direction = DIR_UP;
+		} else if (Input.GetKeyDown (KeyCode.S))
+		{
+			direction = DIR_DOWN;
+		} else if (Input.GetKeyDown (KeyCode.A))
+		{
+			direction = DIR_LEFT;
+		} else if (Input.GetKeyDown (KeyCode.D))
+		{
+			direction = DIR_RIGHT;
+		}
+
+		//MoveUpdate ();
+	}
+
+	//移动
+	void MoveUpdate()
+	{
+		switch (direction)
+		{
+		case DIR_UP:
+			player.transform.Translate (Vector3.forward * 5);
+				break;
+			case DIR_DOWN:
+			player.transform.Translate (Vector3.back * 5);
+				break;
+			case DIR_LEFT:
+				player.transform.Translate (Vector3.left * 5);
+				break;
+			case DIR_RIGHT:
+				player.transform.Translate (Vector3.right * 5);
+				break;
+		}
+	}
+
+	void LateUpdate()
+	{
+		if (gameStatus != GAMEING)
+			return;
+		//摄像机跟随人物
+		//transform.position = player.transform.position + offsetVector;
+		//angleX = player.transform.eulerAngles.x;
+		angleY = player.transform.eulerAngles.y;
+		//angleZ = player.transform.eulerAngles.z;
+
+		//使用平滑
+		//currentAngleX = Mathf.LerpAngle(currentAngleX, angleX, lerpAngleOffset);
+		currentAngleY = Mathf.LerpAngle (currentAngleY, angleY, lerpAngleOffset);
+		rotation = Quaternion.Euler (0, currentAngleY, 0);
+
+		//设置相机位置
+		transform.position = player.transform.position - (rotation * offsetVector);
+		//transform.RotateAround (player.transform.position + offsetVector, new Vector3 (20, 0, 0), player.transform.rotation);
+
+		//摄像机对准
+		transform.LookAt (player.transform);
+
+		//st = string.Empty;
+		//定位位置
+		mapRoleX = player.transform.position.x / scaleX + mapOffsetX;
+		mapRoleY = player.transform.position.z / scaleY + mapOffsetY;
+		//Debug.Log ("x:"+mapRoleX + "Y:" + mapOffsetY);
+	}
+
+	void FixedUpdate()
+	{
+		//float x = player.transform.position.x;
+		//float z = player.transform.position.z;
+//		if (x >= wid / 2)
+//		{
+//			x = wid / 2;
+//		}
+//		if(x <= -wid / 2)
+//		{
+//			x = -wid /2;
+//		}
+//		if (z >= hei / 2)
+//		{
+//			z = hei / 2;
+//		}
+//		if (z <= -hei / 2)
+//		{
+//			z = -hei / 2;
+//		}
+
+		//player.transform.Translate (new Vector3 (x, player.transform.position.y, z));
+
+
+	}
+
+	//更新GUI
+	void OnGUI()
+	{
+		//GUI.sk
+		switch (gameStatus)
+		{
+		case GAMEING:
+			GameIngGui ();
+			break;
+		case GAMEEND:
+			GameEndGui ();
+			break;
+		}
+	}
+
+	//游戏正在进行中的ui显示
+	void GameIngGui()
+	{
+		endGameCanvas.enabled = false;
+
+		GUI.skin.label.normal.textColor = new Color(255,0,0);
+		GUI.skin.label.fontSize = 20;
+		GUI.Label(new Rect(20,20,200,40),"分数：" + numScore);
+		GUI.Label (new Rect (20, 60, 200, 40), "当前总共：" + currentNum);
+		GUI.Label (new Rect (20, 100, 200, 40), "所有总共：" + countNum);
+
+		GUI.DrawTexture (new Rect (Screen.width - map.width, 0, map.width, map.height), map);
+		GUI.DrawTexture (new Rect (mapRoleX, mapRoleY, role.width, role.height), role);
+
+		//
+		GameObject [] objs = GameObject.FindGameObjectsWithTag("food");
+		//Debug.Log (objs.Length);
+		for (int i = 0; i < objs.Length; i++)
+		{
+			GameObject obj = objs [i];
+
+			float vx = mapOffsetX + obj.transform.position.x / scaleX;
+			float vy = mapOffsetY + obj.transform.position.z / scaleY;
+
+			//Debug.Log ("vx:"+ vx + "vy:" + vy);
+			GUI.DrawTexture (new Rect (vx, vy, target.width, target.height), target);
+		}
+
+		//*******check game over/////
+		//剩余时间
+		float remain = Remain();
+		if (remain <= 0)
+		{
+			//时间到，游戏结束
+			GameEndStatus ();
+		}
+
+		GUI.Label (new Rect (20, 140, 300, 40), "游戏时间：" + formatTime (remain));
+	}
+
+	float Remain()
+	{
+		float remain = Mathf.Max(totalTime - (Time.time - startTime),0);
+		return remain;
+	}
+
+	//游戏结束的ui显示
+	void GameEndGui()
+	{
+		endGameCanvas.enabled = true;
+
+		float score = endTime - startTime;
+		resultText.text = "游戏结束\n 您的分数是:" + numScore + "分";
+	}
+
+	//格式化
+	string formatTime(float time)
+	{
+		int day = Mathf.FloorToInt (time / (3600 * 24));
+		int hour = Mathf.FloorToInt(time / 3600);
+		int minu = Mathf.FloorToInt(time / 60);
+		int seco = Mathf.FloorToInt(time % 60);
+		string str = "";
+		if (day > 0)
+		{
+			str = day + "天" + hour + "小时" + minu + "分" + seco + "秒";
+		} 
+		else
+		{
+			
+			str = formatNumber(hour) + ":" +  formatNumber(minu) + ":" +  formatNumber(seco);
+		}
+
+		return str;
+	}
+
+	//写着
+	string formatNumber(int num,string replaceValue = "0",int count = 2)
+	{
+		string numStr = num.ToString ();
+		while (numStr.Length < count)
+		{
+			numStr = replaceValue + numStr;
+		}
+		return numStr;
+	}
+ 
+	//创建食物
+	void CreateFood()
+	{
+		//Debug.Log ("CreateFood");
+		//当前个数超过20个就不生成
+		if (currentNum >= 20)
+			return;
+		//随机生成不同位置的食物
+		float randomX = Random.Range (-wid/2,wid/2);
+		float randomZ = Random.Range (-hei/2,hei/2);
+		Debug.Log ("随机生成的X:" + randomX + "随机生成的Z:" + randomZ);
+
+		//放位置
+		GameObject obj = Instantiate(FOOD);
+		obj.transform.position = new Vector3 (randomX,3,randomZ);
+		//增加个数
+		countNum++;
+		currentNum++;
+	}
+
+	//创建get set方法
+	public int NumberScore
+	{
+		get
+		{
+			return numScore;
+		}
+
+		set 
+		{ 
+			numScore = value;
+		}
+	}
+
+	//销毁物体
+	public void DestroyObject()
+	{
+		numScore ++;//分数增加
+		currentNum --;//当前
+        createBody(); ;//添加一个身体
+		//totalTime = Mathf.Min(Remain() + addTime,30);
+		if(numScore >= winNum)
+		{
+			GameEndStatus ();
+		}
+	}
+
+    //增加一个新的身体
+    void createBody()
+    {
+        GameObject obj = Instantiate(lastBody);
+        FollowTarget CShape = obj.GetComponent<FollowTarget>();
+        CShape.target = lastBody;
+
+        lastBody = obj;
+    }
+
+    //游戏结束处理逻辑
+    public void GameEndStatus()
+	{
+		gameStatus = GAMEEND;
+		endTime = Time.time;
+		destoryAllObjs ();
+		CancelInvoke ("CreateFood");
+	}
+
+	//游戏开始处理逻辑
+	public void GameStartStatus()
+	{
+		//加载当前场景重新开始游戏
+		SceneManager.LoadScene (SceneManager.GetActiveScene ().name);
+	}
+		
+	//重新开始游戏
+	public void ReStart()
+	{
+		//游戏进入开始状态
+		GameStartStatus ();
+	}
+
+	//销毁所有生成的
+	void destoryAllObjs()
+	{
+		//获取所有的食物
+		GameObject [] objs = GameObject.FindGameObjectsWithTag("food");
+		for (int i = 0; i < objs.Length; i++)
+		{
+			GameObject obj = objs [i];
+			Destroy (obj);
+		}
+	}
+
+}
