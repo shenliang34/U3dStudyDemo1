@@ -108,8 +108,15 @@ public class Move : MonoBehaviour {
 	private const int GAMEEND = 2;
 	//游戏暂停
 	private const int GAMEPAUSE = 3;
+    //游戏开始
+    private const int GAMESTART = 4;
 	//游戏状态
 	private int gameStatus = 0;
+
+    //
+    //public Canvas startCanvas;
+    //
+   // public Button startGameBtn;
 
 	void Start () {
 		startTime = Time.time;
@@ -129,7 +136,8 @@ public class Move : MonoBehaviour {
 
 		numScore = countNum = 0;
 
-		gameStatus = GAMEING;
+		gameStatus = GAMEING;//游戏进行中
+        //gameStatus = GAMESTART;//开始游戏
 		endGameCanvas = GameObject.Find ("Canvas").GetComponent<Canvas>();
 		resultText = GameObject.Find ("Canvas/result").GetComponent<Text>();
 		endGameCanvas.enabled = false;
@@ -140,17 +148,26 @@ public class Move : MonoBehaviour {
 		FOOD = Resources.Load("player") as GameObject;
         SNAKE_BODY = Resources.Load("snake") as GameObject;
 
-        InvokeRepeating ("CreateFood", 0, 1);
-		//InvokeRepeating ("MoveUpdate", 0, 0.2f);
+        //startGameBtn.onClick.AddListener(delegate () { this.click(startGameBtn); });
 
-		//链条关节
-		//HingeJoint joint = player.AddComponent<HingeJoint>();
-		//obj.GetComponent<Rigidbody> ().useGravity = true;
-		//joint.connectedBody = obj.GetComponent<Rigidbody>();
-	}
-	
-	// Update is called once per frame
-	void Update () {
+
+
+       InvokeRepeating ("CreateFood", 0, 1);
+       //InvokeRepeating ("MoveUpdate", 0, 0.2f);
+
+        //链条关节
+        //HingeJoint joint = player.AddComponent<HingeJoint>();
+        //obj.GetComponent<Rigidbody> ().useGravity = true;
+        //joint.connectedBody = obj.GetComponent<Rigidbody>();
+    }
+
+    void click(Button sender)
+    {
+        Debug.Log("click" + sender.name);
+    }
+
+    // Update is called once per frame
+    void Update () {
 		if (gameStatus != GAMEING)
 			return;
 
@@ -160,19 +177,40 @@ public class Move : MonoBehaviour {
 		float horizontal = Input.GetAxis (HORIZONTAL);
 		float vertical = Input.GetAxis (VERTICAL);
 
-//		if (Input.GetKeyDown (KeyCode.W))
-//		{
-//			direction = DIR_UP;
-//		} else if (Input.GetKeyDown (KeyCode.S))
-//		{
-//			direction = DIR_DOWN;
-//		} else if (Input.GetKeyDown (KeyCode.A))
-//		{
-//			direction = DIR_LEFT;
-//		} else if (Input.GetKeyDown (KeyCode.D))
-//		{
-//			direction = DIR_RIGHT;
-//		}
+        //		if (Input.GetKeyDown (KeyCode.W))
+        //		{
+        //			direction = DIR_UP;
+        //		} else if (Input.GetKeyDown (KeyCode.S))
+        //		{
+        //			direction = DIR_DOWN;
+        //		} else if (Input.GetKeyDown (KeyCode.A))
+        //		{
+        //			direction = DIR_LEFT;
+        //		} else if (Input.GetKeyDown (KeyCode.D))
+        //		{
+        //			direction = DIR_RIGHT;
+        //		}
+
+        //镜头效果
+        if (numScore >= 1)
+        {
+            Camera cam = this.GetComponent<Camera>();
+            if (cam.fieldOfView < 40)
+            {
+                // MainCamera.fieldOfView
+                cam.fieldOfView = Mathf.MoveTowards(cam.fieldOfView,40,0.5f);
+            }
+
+            if (numScore >= 3)
+            {
+                if (cam.fieldOfView < 60)
+                {
+
+                    cam.fieldOfView = Mathf.MoveTowards(cam.fieldOfView, 60, 0.5f);
+
+                }
+            }
+        }
 
 
 		if (horizontal == 1)
@@ -190,7 +228,7 @@ public class Move : MonoBehaviour {
 			player.transform.Rotate(Vector3.down * Time.deltaTime * rotateSpeed);
 		}
 
-
+        //默认开始动
         player.transform.Translate(Vector3.forward * Time.deltaTime * moveSpeed);
         if (vertical == 1)
 		{
